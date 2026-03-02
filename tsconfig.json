@@ -4,6 +4,8 @@
     "esModuleInterop": true,
     "noImplicitAny": true,
     "noEmitOnError": true,
+    "noUnusedLocals":true,
+    "outDir": "./build"
   },
   "include": ["./src/**/*", "./server.ts"]
 }
