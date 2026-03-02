@@ -9,20 +9,34 @@ export default class PetRepository implements InterfacePetRepository {
     constructor(repository: Repository<PetEntity>) {
         this.repository = repository;
     }
-    criaPet(pet: PetType): void {
-        this.repository.save(pet);
+
+    async geraId(): Promise<number> {
+        const row = await this.repository.query("SELECT MAX(id) as ultimoId FROM pet_entity");
+        return (row?.[0]?.ultimoId ?? 0) + 1;
     }
-    listaPets(): Array<PetType> {
-        throw new Error("Method not implemented.");
+
+    async criaPet(pet: PetType): Promise<void> {
+        await this.repository.save(pet);
     }
-    buscaPetPorId(id: number): PetType | null {
-        throw new Error("Method not implemented.");
+    async listaPets(): Promise<Array<PetType>> {
+        return await this.repository.find();
     }
-    atualizaPet(id: number, pet: PetType): void {
-        throw new Error("Method not implemented.");
+    async buscaPetPorId(id: number): Promise<PetType | null> {
+        return await this.repository.findOneBy({ id });
     }
-    deletaPet(id: number): void {
-        throw new Error("Method not implemented.");
+    async buscaPetGenerico(campo: string, valor: string): Promise<Array<PetType>> {
+        return await this.repository.findBy({ [campo]: valor });
+    }
+    async atualizaPet(id: number, pet: PetType): Promise<void> {
+        const petToUpdate = await this.repository.findOne({ where: { id } });
+        if (!petToUpdate) {
+            throw new Error("Pet não encontrado");
+        }
+        Object.assign(petToUpdate, pet);
+        await this.repository.save(petToUpdate);
+    }
+    async deletaPet(id: number): Promise<void> {
+        await this.repository.delete(id);
     }
 
 
