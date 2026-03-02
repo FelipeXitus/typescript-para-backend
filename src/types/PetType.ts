@@ -4,7 +4,7 @@ type PetType = {
     id: number;
     nome: string;
     especie: EnumEspecie;
-    idade: number;
+    dataDeNascimento: Date;
     adotado: boolean;
 }
 

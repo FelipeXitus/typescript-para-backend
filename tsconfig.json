@@ -5,7 +5,9 @@
     "noImplicitAny": true,
     "noEmitOnError": true,
     "noUnusedLocals":true,
-    "outDir": "./build"
+    "outDir": "./build",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
   "include": ["./src/**/*", "./server.ts"]
 }
