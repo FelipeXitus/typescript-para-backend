@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import EnumEspecie from "../enum/EnumEspecie";
 import AddressEntity from "./AddressEntity";
+import PetEntity from "./PetEntity";
 
 @Entity()
 export default class AdopterEntity {
@@ -23,6 +24,8 @@ export default class AdopterEntity {
     endereco?: AddressEntity;
     @Column({ nullable: true })
     especieDePreferencia?: EnumEspecie;
+    @OneToMany(() => PetEntity, pet => pet.adotante, { nullable: true, eager: true })
+    pets!: PetEntity[];
 
     constructor(nome: string, cpf: string, senha: string, celular: string, email: string, foto?: string, endereco?: AddressEntity, especieDePreferencia?: EnumEspecie) {
         this.nome = nome;
@@ -33,5 +36,6 @@ export default class AdopterEntity {
         this.foto = foto;
         this.endereco = endereco;
         this.especieDePreferencia = especieDePreferencia;
+;
     }
 }

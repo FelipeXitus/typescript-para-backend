@@ -1,4 +1,3 @@
-import AdopterType from "../types/AdopterType";
 import { Repository } from "typeorm";
 import AdopterEntity from "../entities/AdopterEntity";
 import InterfaceAdopterRepository from "./interfaces/InterfaceAdopterRepository";
@@ -9,28 +8,28 @@ export default class AdopterRepository implements InterfaceAdopterRepository {
     constructor(repository: Repository<AdopterEntity>) {
         this.repository = repository;
     }
-    async criaAdotante(adopter: AdopterType): Promise<AdopterType> {
+    async criaAdotante(adopter: AdopterEntity): Promise<AdopterEntity> {
         return await this.repository.save(adopter);
     }
-    async buscaAdotantePorId(id: number): Promise<AdopterType | null> {
+    async buscaAdotantePorId(id: number): Promise<AdopterEntity | null> {
         return await this.repository.findOneBy({ id });
     }
-    async buscaAdotantePorCpf(cpf: string): Promise<AdopterType | null> {
+    async buscaAdotantePorCpf(cpf: string): Promise<AdopterEntity | null> {
         return await this.repository.findOneBy({ cpf });
     }
-    async buscaAdotantePorParametro(param: string): Promise<AdopterType[]> {
+    async buscaAdotantePorParametro(param: string): Promise<AdopterEntity[]> {
         return await this.repository.findBy({ [param]: param });
     }
-    async listaAdotantes(): Promise<AdopterType[]> {
+    async listaAdotantes(): Promise<AdopterEntity[]> {
         return await this.repository.find();
     }
     async deletaAdotante(id: number): Promise<void> {
         await this.repository.delete(id);
     }
-    async atualizaAdotante(adopter: AdopterType): Promise<AdopterType> {
+    async atualizaAdotante(adopter: AdopterEntity): Promise<AdopterEntity> {
         return await this.repository.save(adopter);
     }
-    async atualizaEnderecoAdotante(idAdotante: number, endereco: AddressEntity): Promise<AdopterType> {
+    async atualizaEnderecoAdotante(idAdotante: number, endereco: AddressEntity): Promise<AdopterEntity> {
         const adopter = await this.repository.findOne({ where: { id: idAdotante } });
         if (!adopter) {
             throw new Error("Adotante não encontrado");

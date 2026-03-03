@@ -10,7 +10,8 @@ type AdopterType = {
     email: string;
     foto?: string;
     endereco?: AddressEntity;
-    especieDePreferencia?: EnumEspecie
+    especieDePreferencia?: EnumEspecie;
+    pets?: [{id: number; nome: string; especie: EnumEspecie; dataDeNascimento: Date}];
 }
 
 export default AdopterType;

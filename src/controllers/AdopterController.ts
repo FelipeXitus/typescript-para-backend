@@ -9,9 +9,10 @@ export default class AdopterController {
 
     async criaAdotante(req: Request, res: Response) {
         try {
-            const { nome, celular, endereco, foto, senha, especieDePreferencia, cpf, email} = req.body;
+            const { nome, celular, endereco, foto, senha, especieDePreferencia, cpf, email, pets } = req.body;
 
             const novoAdotante = new AdopterEntity(nome, cpf, senha, celular, email, endereco ?? null, foto ?? null, especieDePreferencia ?? null);
+            novoAdotante.pets = pets ?? [];
 
             await this.repository.criaAdotante(novoAdotante);
             return res.status(201).json(novoAdotante);

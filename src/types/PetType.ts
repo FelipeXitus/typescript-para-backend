@@ -6,6 +6,12 @@ type PetType = {
     especie: EnumEspecie;
     dataDeNascimento: Date;
     adotado: boolean;
+    adotante?: {
+        id: number;
+        nome: string;
+        cpf: string;
+        celular: string;
+        email: string;}
 }
 
 export default PetType;

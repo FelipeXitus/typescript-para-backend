@@ -3,10 +3,11 @@ import type PetType from "../types/PetType";
 import EnumEspecie from "../enum/EnumEspecie";
 import PetRepository from "../repositories/PetRepository";
 import PetEntity from "../entities/PetEntity";
+import AdopterRepository from "../repositories/AdopterRepository";
 
 
 export default class PetController {
-    constructor(private repository: PetRepository) {}
+    constructor(private repository: PetRepository, private adopterRepository: AdopterRepository) {}
     async criaPet(req: Request, res: Response) {
         const { nome, especie, dataDeNascimento, adotado } = <PetEntity>req.body;
         if(!Object.values(EnumEspecie).includes(especie)) {
@@ -66,5 +67,20 @@ export default class PetController {
         }
         await this.repository.deletaPet(Number(id));
         return res.status(200).json({"message": "Pet deletado com sucesso!"});
+    }
+    async adotaPet(req: Request, res: Response) {
+        const { petId, adopterId } = req.params;
+        const pet = await this.repository.buscaPetPorId(Number(petId));
+        if (!pet) {
+            return res.status(404).json({"error": "Pet não encontrado"});
+        }
+        const adotante = await this.adopterRepository.buscaAdotantePorId(Number(adopterId));
+        if (!adotante) {
+            return res.status(404).json({"error": "Adotante não encontrado"});
+        }
+        pet.adotado = true;
+        pet.adotante = adotante;
+        await this.repository.atualizaPet(Number(petId), pet);
+        return res.status(200).json(pet);
     }
 }
