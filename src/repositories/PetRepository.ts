@@ -3,6 +3,7 @@ import PetEntity from "../entities/PetEntity";
 import InterfacePetRepository from "./interfaces/InterfacePetRepository";
 import { Repository } from "typeorm";
 import AdopterEntity from "../entities/AdopterEntity";
+import EnumPorte from "../enum/EnumPorte";
 
 export default class PetRepository implements InterfacePetRepository {
     private repository: Repository<PetEntity>;
@@ -22,12 +23,15 @@ export default class PetRepository implements InterfacePetRepository {
         await this.repository.save(pet);
     }
     async listaPets(): Promise<Array<PetType>> {
-        return await this.repository.find();
+        return await this.repository.find({relations: ["adotante"]});
     }
     async buscaPetPorId(id: number): Promise<PetType | null> {
-        return await this.repository.findOneBy({ id });
+        return await this.repository.findOne({ where: { id }, relations: ["adotante"] });
     }
-    async buscaPetGenerico(campo: string, valor: string): Promise<Array<PetType>> {
+    async buscaPetPorPorte(porte: EnumPorte): Promise<PetEntity[]> {
+        return await this.repository.findBy({ porte });
+    }
+    async buscaPetGenerico<Tipo extends keyof PetEntity>(campo: Tipo, valor: PetEntity[Tipo]):  Promise<PetEntity[]>  {
         return await this.repository.findBy({ [campo]: valor });
     }
     async atualizaPet(id: number, pet: PetType): Promise<void> {
